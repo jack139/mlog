@@ -5,13 +5,14 @@ import sys
 from parser import Drain
 
 input_dir  = 'logs/nginx/'
-output_dir = 'result/'  # The output directory of parsing results
-log_file   = 'uwsgi_wx.log'
-log_format = '\[pid: <Pid>\|app: <App>\|req: <Req>\] <IP> \(\) \{<vars> vars in <Bytes> bytes\} \[<Day> <Mon> <Date> <Time> <Year>\] <Content>' 
+output_dir = 'data/'  # The output directory of parsing results
+log_file   = 'error.log'
+log_format = '<Date> <Time> \[<Level>\] <Pid>\#[0-9]: \*<Seq> <Content>' 
 
 # Regular expression list for optional preprocessing (default: [])
 regex      = [
     #r'blk_(|-)[0-9]+' , # block id
+    r'client\: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', # client IP
     #r'(/|)([0-9]+\.){3}[0-9]+(:[0-9]+|)(:|)', # IP
     r'((?<=[^A-Za-z0-9])|^)(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})((?=[^A-Za-z0-9])|$)', # IP
     #r'(?<=[^A-Za-z0-9])(\-?\+?\d+)(?=[^A-Za-z0-9])|[0-9]+$', # Numbers
