@@ -14,12 +14,12 @@ import sys
 from loglizer.models import PCA
 from loglizer import dataloader, preprocessing
 
-struct_log = 'data/error.log_structured.csv'
+struct_log = 'data/error_web01.log_structured.csv'
 
 if __name__ == '__main__':
     ## 1. Load strutured log file and extract feature vectors
     # Save the raw event sequence file by setting save_csv=True
-    (x_train, _), (_, _), _ = dataloader.load_HDFS(struct_log, window='session', 
+    (x_train, _), (_, _), _ = dataloader.load_HDFS(struct_log, window='session', train_ratio=0.8,
                                                 split_type='sequential', save_csv=True)
     feature_extractor = preprocessing.FeatureExtractor()
     x_train = feature_extractor.fit_transform(x_train, term_weighting='tf-idf', 

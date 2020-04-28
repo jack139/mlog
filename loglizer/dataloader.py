@@ -80,23 +80,34 @@ def load_HDFS(log_file, label_file=None, window='session', train_ratio=0.5, spli
                 na_filter=False, memory_map=True)
         data_dict = OrderedDict()
         for idx, row in struct_log.iterrows():
-            blkId_list = re.findall(r'client\: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', row['Content'])
-            blkId_set = set(blkId_list)
-            for blk_Id in blkId_set:
-                if not blk_Id in data_dict:
-                    data_dict[blk_Id] = []
-                data_dict[blk_Id].append(row['EventId'])
+            # 按时间分组            
+            h_hour = row['Date'] +'_'+ row['Time'].split(':')[0]
+            if not h_hour in data_dict:
+                data_dict[h_hour] = []
+            data_dict[h_hour].append(row['EventId'])
+
+            # 使用 client ip 分组
+            #blkId_list = re.findall(r'client\: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', row['Content'])
+            #blkId_set = set(blkId_list)
+            #for blk_Id in blkId_set:
+            #    if not blk_Id in data_dict:
+            #        data_dict[blk_Id] = []
+            #    data_dict[blk_Id].append(row['EventId'])
+
+            # 使用pid分组
             #if not row['Pid'] in data_dict:
             #    data_dict[row['Pid']] = []
             #data_dict[row['Pid']].append(row['EventId'])
-        data_df = pd.DataFrame(list(data_dict.items()), columns=['ClientIP', 'EventSequence'])
+        data_df = pd.DataFrame(list(data_dict.items()), columns=['HHour', 'EventSequence'])
         
+        #print(data_df.head())
+
         if label_file:
             # Split training and validation set in a class-uniform way
             label_data = pd.read_csv(label_file, engine='c', na_filter=False, memory_map=True)
-            label_data = label_data.set_index('ClientIP')
+            label_data = label_data.set_index('HHour')
             label_dict = label_data['Label'].to_dict()
-            data_df['Label'] = data_df['ClientIP'].apply(lambda x: 1 if label_dict[x] == 'Anomaly' else 0)
+            data_df['Label'] = data_df['HHour'].apply(lambda x: 1 if label_dict[x] == 'Anomaly' else 0)
 
             # Split train and test data
             (x_train, y_train), (x_test, y_test) = _split_data(data_df['EventSequence'].values, 

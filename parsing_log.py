@@ -4,10 +4,11 @@
 import sys
 from parser import Drain
 
-input_dir  = 'logs/nginx/'
+input_dir  = 'logs/web01/'
 output_dir = 'data/'  # The output directory of parsing results
-log_file   = 'error.log'
-log_format = '<Date> <Time> \[<Level>\] <Pid>\#[0-9]: \*<Seq> <Content>' 
+log_file   = 'error_web01.log'
+#log_format = '<Date> <Time> \[<Level>\] <Pid>\#[0-9]: \*<Seq> <Content>' 
+log_format = '<Date> <Time> \[<Level>\] <Pid>\#[0-9]: <Content>' 
 
 # Regular expression list for optional preprocessing (default: [])
 regex      = [
