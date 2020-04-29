@@ -14,7 +14,7 @@ if __name__ == '__main__':
     (x_train, y_train), (x_test, y_test) = dataloader.load_HDFS(struct_log,
                                                                 label_file=label_file,
                                                                 window='session', 
-                                                                train_ratio=0.8,
+                                                                train_ratio=0.5,
                                                                 split_type='uniform')
                                                                 #split_type='sequential')
     feature_extractor = preprocessing.FeatureExtractor()
