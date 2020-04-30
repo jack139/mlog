@@ -6,7 +6,7 @@ Authors:
     LogPAI Team
 
 """
-
+import pickle
 import pandas as pd
 import os
 import numpy as np
@@ -280,3 +280,15 @@ def bgl_preprocess_data(para, raw_data, event_mapping_data):
     print("Among all instances, %d are anomalies"%sum(labels))
     assert event_count_matrix.shape[0] == len(labels)
     return event_count_matrix, labels
+
+
+# save object to file
+def save_object(obj, filename):
+    with open(filename, 'wb') as f:  
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+# load object from file
+def load_object(filename):
+    with open(filename, 'rb') as f:
+        obj = pickle.load(f)
+    return obj

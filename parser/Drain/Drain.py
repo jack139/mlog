@@ -208,14 +208,13 @@ class LogParser:
                 log_templateids[logID] = template_id
             df_events.append([template_id, template_str, occurrence])
 
-        df_event = pd.DataFrame(df_events, columns=['EventId', 'EventTemplate', 'Occurrences'])
+        #df_event = pd.DataFrame(df_events, columns=['EventId', 'EventTemplate', 'Occurrences'])
         self.df_log['EventId'] = log_templateids
         self.df_log['EventTemplate'] = log_templates
 
         if self.keep_para:
             self.df_log["ParameterList"] = self.df_log.apply(self.get_parameter_list, axis=1) 
         self.df_log.to_csv(os.path.join(self.savePath, self.logName + '_structured.csv'), index=False)
-
 
         occ_dict = dict(self.df_log['EventTemplate'].value_counts())
         df_event = pd.DataFrame()

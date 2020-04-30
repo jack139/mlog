@@ -14,7 +14,7 @@ if __name__ == '__main__':
     (x_train, y_train), (x_test, y_test) = dataloader.load_HDFS(struct_log,
                                                                 label_file=label_file,
                                                                 window='session', 
-                                                                train_ratio=0.5,
+                                                                train_ratio=0.8,
                                                                 split_type='uniform')
                                                                 #split_type='sequential')
     feature_extractor = preprocessing.FeatureExtractor()
@@ -30,3 +30,9 @@ if __name__ == '__main__':
     print('Test validation:')
     precision, recall, f1 = model.evaluate(x_test, y_test)
 
+    y_test = model.predict(x_test)
+    print(y_test)
+
+    # save model and feature object
+    dataloader.save_object(model, 'IM.model')
+    dataloader.save_object(feature_extractor, 'IM.feature')
