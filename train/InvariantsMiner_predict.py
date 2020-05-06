@@ -6,9 +6,6 @@ sys.path.append('../')
 from loglizer.models import InvariantsMiner
 from loglizer import dataloader, preprocessing
 
-struct_log = 'data/error_all.log_structured.csv' # The structured log file
-label_file = 'data/anomaly_label_error_all.log.csv' # The anomaly label file
-
 test_struct_log = 'data/error_web01.log_structured.csv' # The structured log file
 test_label_file = 'data/anomaly_label_error_web01.log.csv' # The anomaly label file
 
