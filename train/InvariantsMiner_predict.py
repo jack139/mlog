@@ -1,13 +1,12 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import sys
-sys.path.append('../')
+#sys.path.append('../')
 from loglizer.models import InvariantsMiner
 from loglizer import dataloader, preprocessing
 
-test_struct_log = 'data/error_web01.log_structured.csv' # The structured log file
-test_label_file = 'data/anomaly_label_error_web01.log.csv' # The anomaly label file
+test_struct_log = '../data/error_web01.log_structured.csv' # The structured log file
+test_label_file = '../data/anomaly_label_error_web01.log.csv' # The anomaly label file
 
 epsilon = 0.5 # threshold for estimating invariant space
 

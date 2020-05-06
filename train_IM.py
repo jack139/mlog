@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import sys
-#sys.path.append('../')
-from loglizer.models import InvariantsMiner
-from loglizer import dataloader, preprocessing
+from libs.models import InvariantsMiner
+from libs import dataloader, preprocessing
 
-struct_log = '../data/error_all.log_structured.csv' # The structured log file
-label_file = '../data/anomaly_label_error_all.log.csv' # The anomaly label file
+struct_log = 'data/error_all.log_structured.csv' # The structured log file
+label_file = 'data/anomaly_label_error_all.log.csv' # The anomaly label file
 epsilon = 0.5 # threshold for estimating invariant space
 
 if __name__ == '__main__':
     (x_train, y_train), (x_test, y_test) = dataloader.load_HDFS(struct_log,
                                                                 label_file=label_file,
                                                                 window='session', 
-                                                                train_ratio=0.8,
+                                                                train_ratio=1,
+                                                                save_csv=True,
                                                                 split_type='uniform')
                                                                 #split_type='sequential')
     feature_extractor = preprocessing.FeatureExtractor()
@@ -26,11 +26,11 @@ if __name__ == '__main__':
     print('Train validation:')
     precision, recall, f1 = model.evaluate(x_train, y_train)
     
-    print('Test validation:')
-    precision, recall, f1 = model.evaluate(x_test, y_test)
+    #print('Test validation:')
+    #precision, recall, f1 = model.evaluate(x_test, y_test)
 
-    y_test = model.predict(x_test)
-    print(y_test)
+    #y_test = model.predict(x_test)
+    #print(y_test)
 
     # save model and feature object
     dataloader.save_object(model, 'IM.model')

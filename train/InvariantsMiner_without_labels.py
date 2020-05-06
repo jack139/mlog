@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 ''' This is a demo file for the Invariants Mining model.
     API usage:
@@ -14,8 +13,8 @@ import sys
 from loglizer.models import InvariantsMiner
 from loglizer import dataloader, preprocessing
 
-struct_log = 'data/error_all.log_structured.csv' # The structured log file
-label_file = 'data/anomaly_label_error_all.log.csv' # The anomaly label file
+struct_log = '../data/error_all.log_structured.csv' # The structured log file
+label_file = '../data/anomaly_label_error_all.log.csv' # The anomaly label file
 epsilon = 0.5 # threshold for estimating invariant space
 
 if __name__ == '__main__':

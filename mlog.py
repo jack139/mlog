@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # 从stdin读入数据, 例如使用管道：
@@ -6,51 +5,55 @@
 #
 
 import sys, os
-import subprocess
+import predict
 
 out_dir = './logs/rt'
 
 # 根据时间日期获取 label
 # 参考格式： 2020/04/17 07:09:27 [error] 26119#0: ...
-def get_nginx_error_label(log):
+def get_nginx_error_label(log, minute=60): # 按min分钟为间隔，默认是60分钟 
     log_split = log.split()
     date = log_split[0].replace('/','')
     time = log_split[1].split(':')
-    #return '%s_%s_%s'%(date, time[0], time[1])  # 20200417_07_09 按 分钟
-    return '%s_%s'%(date, time[0])  # 20200417_07 按 小时
+    q = int(time[1])//minute
+    return '%s_%s_%d'%(date, time[0], q)  # 20200417_07_1 按间隔返回
+
+
+# 使用log进行预测
+def predict_it(log_lines, label):
+    struct_log = predict.parse_log(log_lines)
+    y_test = predict.predict_IM(struct_log)
+    print(y_test)
+    if y_test[0]==1: # 出现异常，保存日志
+        filepath = os.path.join(out_dir, 'anomaly_'+label+'.log') 
+        with open(filepath, 'w') as f:
+            f.write(''.join(log_lines))
+        print('Anomaly detected:', filepath)
 
 
 if __name__ == '__main__':
-    current_label = file = process = None
+    current_label = None
+    log_lines = []
 
     for line in sys.stdin:
         if (len(line.split('\n\r'))>1): # 检查是否存在一次多行，按说不应该
             print('WARNING: more than one line!')
             print(line.split('\n\r'))
 
-        label = get_nginx_error_label(line)
+        label = get_nginx_error_label(line, 15)
         if label != current_label:
-            if file: # 第一次时不需要close 
-                file.close()
-                # 生成一个日志集合，开始预测计算
-                print(filepath)
-                process = subprocess.Popen('python3 predict.py '+filepath, shell=True)
-                    #stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
+            # 生成一个日志集合，开始预测计算
+            if len(log_lines)>0:
+                predict_it(log_lines, current_label)
             current_label = label
-            filepath = os.path.join(out_dir, current_label + '.log')
-            file = open(filepath, 'w')
-        
-        file.write(line)
-        file.flush()
+            log_lines = []
+            print(current_label)
+
+        log_lines.append(line)
 
     # 结束
-    if file:
-        file.close()
-        process = subprocess.Popen('python3 predict.py '+filepath, shell=True)
-            #stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if len(log_lines)>0:
+        predict_it(log_lines, current_label)
 
-        print('wait process end ...')
-        retcode = process.wait()
-        print(retcode)
+
 
