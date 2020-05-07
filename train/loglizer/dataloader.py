@@ -81,7 +81,9 @@ def load_HDFS(log_file, label_file=None, window='session', train_ratio=0.5, spli
         data_dict = OrderedDict()
         for idx, row in struct_log.iterrows():
             # 按时间分组            
-            h_hour = row['Date'] +'_'+ row['Time'].split(':')[0]
+            #h_hour = row['Date'] +'_'+ row['Time'].split(':')[0] # nginx
+            ts = row['Timestamp'].split('T') # mongo
+            h_hour = ts[0]+'_'+ts[1].split(':')[0] # mongo
             if not h_hour in data_dict:
                 data_dict[h_hour] = []
             data_dict[h_hour].append(row['EventId'])

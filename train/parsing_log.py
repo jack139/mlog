@@ -3,12 +3,12 @@
 import sys
 from parser import Drain
 
-input_dir  = '../logs/web02/'
+input_dir  = '../logs/mongo/'
 output_dir = '../data/'  # The output directory of parsing results
-log_file   = 'error_all.log'
+log_file   = 'mongodb.log.1'
 #log_file   = 'error_all.log'
-#log_format = '<Date> <Time> \[<Level>\] <Pid>\#[0-9]: \*<Seq> <Content>' 
-log_format = '<Date> <Time> \[<Level>\] <Pid>\#[0-9]: <Content>' 
+#log_format = '<Date> <Time> \[<Level>\] <Pid>\#[0-9]: <Content>'  # nginx 
+log_format = '<Timestamp> <Severity> <Component> \[<Context>\] <Content>'  # mongodb
 
 # Regular expression list for optional preprocessing (default: [])
 regex      = [
@@ -19,9 +19,9 @@ regex      = [
     r'((?<=[^A-Za-z0-9])|^)([\-\+]?\d+)((?=[^A-Za-z0-9])|$)', # Numbers
     r'((?<=[^A-Za-z0-9])|^)(0x[a-f0-9A-F]+)((?=[^A-Za-z0-9])|$)', # HEX
     r'((?<=[^A-Za-z0-9])|^)([GET|POST|PATCH|PUT|DELETE]+)((?=[^A-Za-z0-9])|$)', # method
-    #r'((?<=[^A-Za-z0-9])|^)(([0-9a-f]{2,}:){3,}([0-9a-f]{2,}))((?=[^A-Za-z0-9])|$)', # ID
-    #r'((?<=[^A-Za-z0-9])|^)([0-9a-f]{6,} ?){3,}((?=[^A-Za-z0-9])|$)', # SEQ
-    #r'((?<=[^A-Za-z0-9])|^)([0-9A-F]{4} ?){4,}((?=[^A-Za-z0-9])|$)', # SEQ
+    r'((?<=[^A-Za-z0-9])|^)(([0-9a-f]{2,}:){3,}([0-9a-f]{2,}))((?=[^A-Za-z0-9])|$)', # ID
+    r'((?<=[^A-Za-z0-9])|^)([0-9a-f]{6,} ?){3,}((?=[^A-Za-z0-9])|$)', # SEQ
+    r'((?<=[^A-Za-z0-9])|^)([0-9A-F]{4} ?){4,}((?=[^A-Za-z0-9])|$)', # SEQ
 ]
 st         = 0.5  # Similarity threshold
 depth      = 4  # Depth of all leaf nodes

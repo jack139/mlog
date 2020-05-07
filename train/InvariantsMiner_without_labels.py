@@ -13,8 +13,8 @@ import sys
 from loglizer.models import InvariantsMiner
 from loglizer import dataloader, preprocessing
 
-struct_log = '../data/error_all.log_structured.csv' # The structured log file
-label_file = '../data/anomaly_label_error_all.log.csv' # The anomaly label file
+struct_log = '../data/mongodb.log.1_structured.csv' # The structured log file
+#label_file = '../data/anomaly_label_error_all.log.csv' # The anomaly label file
 epsilon = 0.5 # threshold for estimating invariant space
 
 if __name__ == '__main__':
@@ -44,12 +44,12 @@ if __name__ == '__main__':
 
     # If you have labeled data, you can evaluate the accuracy of the model as well.
     # Load structured log with label info
-    (x_train, y_train), (x_test, y_test) = dataloader.load_HDFS(struct_log,
-                                                               label_file=label_file,
-                                                               window='session', 
-                                                               train_ratio=0,
-                                                               split_type='uniform')   
-    x_test = feature_extractor.transform(x_test)
-    precision, recall, f1 = model.evaluate(x_test, y_test)
+    #(x_train, y_train), (x_test, y_test) = dataloader.load_HDFS(struct_log,
+    #                                                           label_file=label_file,
+    #                                                           window='session', 
+    #                                                           train_ratio=0,
+    #                                                           split_type='uniform')   
+    #x_test = feature_extractor.transform(x_test)
+    #precision, recall, f1 = model.evaluate(x_test, y_test)
 
 

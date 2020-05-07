@@ -128,6 +128,7 @@ class InvariantsMiner(object):
         FLAG_break_loop = False
         # check invariant of more columns
         while len(item_list) != 0:
+            print('len(item_list)=', len(item_list))
             if self.longest_invarant and len(item_list[0]) >= self.longest_invarant:
                 break
             joined_item_list = self._join_set(item_list, length) # generate new invariant candidates
