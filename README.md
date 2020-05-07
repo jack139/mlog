@@ -1,5 +1,8 @@
 ## MLog (Machine learning Log analysis)
 
+
+### 模型测试：
+
 生成日志模板
 `train/python3 paring_log`
 
@@ -23,14 +26,12 @@ PCA测试
 
 ##### 预测过程：
 
-日志文件 --> bash脚本 --> stdin
-log --> 生成模板 --> 比对是否有新模板
-根据窗口设置生成日志数据 --> 使用模型预测
+日志文件 --> pipe --> stdin --> 生成模板 --> 比对是否有新模板 --> 生成日志数据 --> 使用模型预测
 
 `cat logs/nginx/error.log | python3 mlog.py`
 
 `python3 predict.py logs/rt/20200417_07.log`
 
-### 多机版：
+### 多机版：(TODO)
 
 实时日志 --> flume --> Kafka --> MLog
