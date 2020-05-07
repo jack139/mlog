@@ -13,7 +13,7 @@ import sys
 from loglizer.models import PCA
 from loglizer import dataloader, preprocessing
 
-struct_log = 'data/error_web01.log_structured.csv'
+struct_log = '../data/error_all.log_structured.csv'
 
 if __name__ == '__main__':
     ## 1. Load strutured log file and extract feature vectors

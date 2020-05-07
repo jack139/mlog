@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import sys
-sys.path.append('../')
 from loglizer.models import PCA
 from loglizer import dataloader, preprocessing
 
-struct_log = 'data/error_all.log_structured.csv' # The structured log file
-label_file = 'data/anomaly_label_error_all.log.csv' # The anomaly label file
+struct_log = '../data/error_all.log_structured.csv' # The structured log file
+label_file = '../data/anomaly_label_error_all.log.csv' # The anomaly label file
 
 if __name__ == '__main__':
     (x_train, y_train), (x_test, y_test) = dataloader.load_HDFS(struct_log,

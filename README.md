@@ -19,7 +19,7 @@ PCA测试
 
 日志文件 --> 日志模板 --> 根据窗口设置生成日志数据 --> 训练模型
 
-`python3 train_IM.py`
+`python3 train_IM.py logs/web02/error_all.log`
 
 ##### 预测过程：
 

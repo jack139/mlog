@@ -5,11 +5,17 @@ from libs.models import InvariantsMiner
 from libs import dataloader, preprocessing
 from predict import parse_log_file
 
-log_file = 'logs/web02/error_all.log'
+#log_file = 'logs/web01/error_web01.log'
 #label_file = 'data/anomaly_label_error_all.log.csv' # The anomaly label file  IM 训练实际不需要标签
 epsilon = 0.5 # threshold for estimating invariant space
 
 if __name__ == '__main__':
+    if len(sys.argv)<2:
+        print("usage: python %s <log_file>" % sys.argv[0])
+        sys.exit(2)
+
+    log_file = sys.argv[1]
+
     # 分析日志
     struct_log, templates = parse_log_file(log_file)
 
