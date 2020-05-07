@@ -28,7 +28,7 @@ def predict_it(log_lines, label):
         filepath = os.path.join(out_dir, 'anomaly_'+label+'.log') 
         with open(filepath, 'w') as f:
             f.write(''.join(log_lines))
-        print('Anomaly detected:', filepath)
+        print('-------------------->>>> Anomaly detected:', filepath)
 
 
 if __name__ == '__main__':
