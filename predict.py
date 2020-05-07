@@ -24,21 +24,36 @@ from libs import dataloader #, preprocessing
 
 epsilon = 0.5 # threshold for estimating invariant space
 
+# 已训练的模型
+trained_model = dataloader.load_object('IM.model')
+trained_feature = dataloader.load_object('IM.feature')
+trained_templates = dataloader.load_object('IM.templates')
+
 
 # 使用参数方式传递
 
 # 分析日志
 def parse_log(log_lines):
     parser = Drain.LogParser(log_format, outdir=output_dir, depth=depth, st=st, rex=regex, save_csv=False)
-    struct_log, _ = parser.parse(logLines=log_lines)
+    struct_log, templates = parser.parse(logLines=log_lines)
+    for i in templates:
+        if i[0] not in trained_templates:
+            print('>>>>>>>>>>>>>>>>>>>>>>>>> UNKNOWN templates:', i[0], i[1])
     return struct_log
+
+def parse_log_file(log_file):
+    input_dir, log_filename = os.path.split(log_file)
+    parser = Drain.LogParser(log_format, indir=input_dir, outdir=output_dir,  depth=depth, st=st, rex=regex)    
+    _, templates_id = parser.parse(log_filename)
+    struct_log = os.path.join(output_dir, log_filename + '_structured.csv')
+    return struct_log, templates_id
 
 # 预测计算
 def predict_IM(struct_log):
     # 预测计算
     # load model and feature object from file
-    model = dataloader.load_object('IM.model')
-    feature_extractor = dataloader.load_object('IM.feature')
+    model = trained_model
+    feature_extractor = trained_feature
 
     (x_train, _), (x_test, _), _ = dataloader.load_HDFS(df_log=struct_log,
                                                     window='session', 
@@ -60,11 +75,7 @@ if __name__ == '__main__':
     log_file = sys.argv[1]
 
     # 分析日志
-    input_dir, log_filename = os.path.split(log_file)
-    parser = Drain.LogParser(log_format, indir=input_dir, outdir=output_dir,  depth=depth, st=st, rex=regex)    
-    parser.parse(log_filename)
-
-    struct_log = os.path.join(output_dir, log_filename + '_structured.csv')
+    struct_log = parse_log_file(log_file)
 
     # 预测计算
     # load model and feature object from file

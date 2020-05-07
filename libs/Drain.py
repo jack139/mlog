@@ -292,7 +292,7 @@ class LogParser:
         self.outputResult(logCluL)
         
         print('Parsing done. [Time taken: {!s}]'.format(datetime.now() - start_time))
-        return self.df_log, self.df_template
+        return self.df_log, self.df_template[['EventId','EventTemplate']].values.tolist()
 
     def load_data(self):
         headers, regex = self.generate_logformat_regex(self.log_format)

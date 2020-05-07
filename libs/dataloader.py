@@ -79,7 +79,7 @@ def load_HDFS(log_file=None, df_log=None, label_file=None, window='session', tra
     assert window == 'session', "Only window=session is supported for HDFS dataset."
     data_dict = OrderedDict()
     for idx, row in struct_log.iterrows():
-        # 按时间分组            
+        # 按时间分组   每小时
         h_hour = row['Date'] +'_'+ row['Time'].split(':')[0]
         if not h_hour in data_dict:
             data_dict[h_hour] = []

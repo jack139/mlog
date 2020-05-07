@@ -13,6 +13,8 @@ out_dir = './logs/rt'
 # 参考格式： 2020/04/17 07:09:27 [error] 26119#0: ...
 def get_nginx_error_label(log, minute=60): # 按min分钟为间隔，默认是60分钟 
     log_split = log.split()
+    if len(log_split)<2: # 可能是空行
+        return None
     date = log_split[0].replace('/','')
     time = log_split[1].split(':')
     q = int(time[1])//minute
@@ -28,7 +30,7 @@ def predict_it(log_lines, label):
         filepath = os.path.join(out_dir, 'anomaly_'+label+'.log') 
         with open(filepath, 'w') as f:
             f.write(''.join(log_lines))
-        print('-------------------->>>> Anomaly detected:', filepath)
+        print('-------------------->>>> ANOMALY detected:', filepath)
 
 
 if __name__ == '__main__':
@@ -41,6 +43,8 @@ if __name__ == '__main__':
             print(line.split('\n\r'))
 
         label = get_nginx_error_label(line, 15)
+        if label is None:
+            continue
         if label != current_label:
             # 生成一个日志集合，开始预测计算
             if len(log_lines)>0:

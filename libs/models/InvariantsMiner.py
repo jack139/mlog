@@ -16,6 +16,7 @@ import numpy as np
 from itertools import combinations
 from ..utils import metrics
 import json
+from datetime import datetime
 
 class InvariantsMiner(object):
 
@@ -108,6 +109,7 @@ class InvariantsMiner(object):
             X: ndarray, the event count matrix of shape num_instances-by-num_events
             r: the dimension of invariant space
         """
+        start_time = datetime.now()
 
         num_instances, num_events = X.shape
         invariants_dict = dict()  # save the mined Invariants(value) and its corresponding columns(key)
@@ -129,6 +131,7 @@ class InvariantsMiner(object):
         FLAG_break_loop = False
         # check invariant of more columns
         while len(item_list) != 0:
+            print('len(item_list)=', len(item_list))
             if self.longest_invarant and len(item_list[0]) >= self.longest_invarant:
                 break
             joined_item_list = self._join_set(item_list, length) # generate new invariant candidates
@@ -158,6 +161,7 @@ class InvariantsMiner(object):
                 break
             length += 1
         print('Mined {} invariants: {}\n'.format(len(invariants_dict), invariants_dict))
+        print('Parsing done. [Time taken: {!s}]'.format(datetime.now() - start_time))
         self.invariants_dict = invariants_dict
 
     def _compute_eigenvector(self, X):
