@@ -80,13 +80,20 @@ def load_HDFS(log_file, label_file=None, window='session', train_ratio=0.5, spli
                 na_filter=False, memory_map=True)
         data_dict = OrderedDict()
         for idx, row in struct_log.iterrows():
-            # 按时间分组            
-            #h_hour = row['Date'] +'_'+ row['Time'].split(':')[0] # nginx
-            ts = row['Timestamp'].split('T') # mongo
-            h_hour = ts[0]+'_'+ts[1].split(':')[0] # mongo
+            # 按时间分组
+            time = row['Time'].split(':')
+            q = int(time[1])//15  # 时间间隔，单位分钟
+            h_hour = '%s_%s_%d'%(row['Date'], time[0], q) 
             if not h_hour in data_dict:
                 data_dict[h_hour] = []
             data_dict[h_hour].append(row['EventId'])
+
+            # mongodb 按时间分组
+            #ts = row['Timestamp'].split('T') # mongo
+            #h_hour = ts[0]+'_'+ts[1].split(':')[0] # mongo
+            #if not h_hour in data_dict:
+            #    data_dict[h_hour] = []
+            #data_dict[h_hour].append(row['EventId'])
 
             # 使用 client ip 分组
             #blkId_list = re.findall(r'client\: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', row['Content'])

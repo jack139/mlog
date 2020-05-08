@@ -45,7 +45,7 @@ def _split_data(x_data, y_data=None, train_ratio=0, split_type='uniform'):
     return (x_train, y_train), (x_test, y_test)
 
 def load_HDFS(log_file=None, df_log=None, label_file=None, window='session', train_ratio=0.5, 
-    split_type='sequential', save_csv=False, window_size=0):
+    split_type='sequential', save_csv=False, window_size=0, period=60):
     """ Load HDFS structured log into train and test data
 
     Arguments
@@ -80,7 +80,9 @@ def load_HDFS(log_file=None, df_log=None, label_file=None, window='session', tra
     data_dict = OrderedDict()
     for idx, row in struct_log.iterrows():
         # 按时间分组   每小时
-        h_hour = row['Date'] +'_'+ row['Time'].split(':')[0]
+        time = row['Time'].split(':')
+        q = int(time[1])//period  # 时间间隔，单位分钟
+        h_hour = '%s_%s_%d'%(row['Date'], time[0], q) 
         if not h_hour in data_dict:
             data_dict[h_hour] = []
         data_dict[h_hour].append(row['EventId'])

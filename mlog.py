@@ -23,13 +23,16 @@ def get_nginx_error_label(log, minute=60): # 按min分钟为间隔，默认是60
 
 # 使用log进行预测
 def predict_it(log_lines, label):
-    struct_log = predict.parse_log(log_lines)
+    struct_log, unknown_templates = predict.parse_log(log_lines)
     y_test = predict.predict_IM(struct_log)
     print(y_test)
     if y_test[0]==1: # 出现异常，保存日志
         filepath = os.path.join(out_dir, 'anomaly_'+label+'.log') 
         with open(filepath, 'w') as f:
             f.write(''.join(log_lines))
+            if len(unknown_templates)>0:
+                f.write('\nUNKNOWN templates:\n')
+                f.write(''.join(unknown_templates))
         print('-------------------->>>> ANOMALY detected:', filepath)
 
 
@@ -42,7 +45,16 @@ if __name__ == '__main__':
             print('WARNING: more than one line!')
             print(line.split('\n\r'))
 
-        label = get_nginx_error_label(line, 15)
+        # 预处理wechat-manger 的 Java 日志
+        if line[0] == '\t': # java异常的中间内容，忽略
+            continue
+        if line[0].isdigit(): # 正常格式日志
+            l2 = line.split()
+            last_dt = l2[0]+' '+l2[1]
+        else: # java异常，首行
+            line = last_dt + ' [-] ERROR ' + line
+
+        label = get_nginx_error_label(line, predict.period)
         if label is None:
             continue
         if label != current_label:

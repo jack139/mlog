@@ -13,7 +13,7 @@ import sys
 from loglizer.models import InvariantsMiner
 from loglizer import dataloader, preprocessing
 
-struct_log = '../data/mongodb.log.1_structured.csv' # The structured log file
+struct_log = '../data/wechat.log_structured.csv' # The structured log file
 #label_file = '../data/anomaly_label_error_all.log.csv' # The anomaly label file
 epsilon = 0.5 # threshold for estimating invariant space
 
@@ -21,9 +21,10 @@ if __name__ == '__main__':
     # Load structured log without label info
     (x_train, _), (x_test, _), _ = dataloader.load_HDFS(struct_log,
                                                      window='session', 
-                                                     train_ratio=0.8,
-                                                     split_type='uniform')
-                                                     #split_type='sequential')
+                                                     train_ratio=1,
+                                                     save_csv=True,
+                                                     #split_type='uniform')
+                                                     split_type='sequential')
     # Feature extraction
     feature_extractor = preprocessing.FeatureExtractor()
     x_train = feature_extractor.fit_transform(x_train)
@@ -52,4 +53,6 @@ if __name__ == '__main__':
     #x_test = feature_extractor.transform(x_test)
     #precision, recall, f1 = model.evaluate(x_test, y_test)
 
-
+    # save model and feature object
+    dataloader.save_object(model, 'IM.model')
+    dataloader.save_object(feature_extractor, 'IM.feature')
