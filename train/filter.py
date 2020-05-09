@@ -31,7 +31,7 @@ import sys, os
 #            f1.write(f2.read())
 
 # java 日志去掉异常
-log_dir = '../logs/wechat_test'
+log_dir = '../logs/wechat'
 file_list = os.listdir(log_dir)
 for f in file_list:
     if f.startswith('new_'):

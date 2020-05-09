@@ -37,6 +37,9 @@ def predict_it(log_lines, label):
 
 
 if __name__ == '__main__':
+    if len(sys.argv)>1:
+        out_dir = sys.argv[1] # 第一个参数：异常日志保存的路径
+
     current_label = None
     log_lines = []
 
