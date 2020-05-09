@@ -7,7 +7,7 @@
 import sys, os
 import predict
 
-out_dir = './logs/rt'
+out_dir = 'logs/rt'
 
 # 根据时间日期获取 label
 # 参考格式： 2020/04/17 07:09:27 [error] 26119#0: ...
@@ -15,7 +15,7 @@ def get_nginx_error_label(log, minute=60): # 按min分钟为间隔，默认是60
     log_split = log.split()
     if len(log_split)<2: # 可能是空行
         return None
-    date = log_split[0].replace('/','')
+    date = log_split[0]
     time = log_split[1].split(':')
     q = int(time[1])//minute
     return '%s_%s_%d'%(date, time[0], q)  # 20200417_07_1 按间隔返回
@@ -43,6 +43,7 @@ if __name__ == '__main__':
     current_label = None
     log_lines = []
 
+    last_dt = ''
     for line in sys.stdin:
         if (len(line.split('\n\r'))>1): # 检查是否存在一次多行，按说不应该
             print('WARNING: more than one line!')
@@ -55,7 +56,10 @@ if __name__ == '__main__':
             l2 = line.split()
             last_dt = l2[0]+' '+l2[1]
         else: # java异常，首行
-            line = last_dt + ' [-] ERROR ' + line
+            if last_dt=='':  # 没有时间记录，跳过
+                continue
+            else:
+                line = last_dt + ' [-] ERROR ' + line
 
         label = get_nginx_error_label(line, predict.period)
         if label is None:
