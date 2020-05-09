@@ -34,7 +34,7 @@ def predict_it(log_lines, label):
                 f.write('\nUNKNOWN templates:\n')
                 f.write(''.join(unknown_templates))
         print('-------------------->>>> ANOMALY detected:', filepath)
-
+    sys.stdout.flush()
 
 if __name__ == '__main__':
     if len(sys.argv)>1:
