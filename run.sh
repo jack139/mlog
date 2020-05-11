@@ -11,12 +11,12 @@ start_back() {
 }
 
 stop_back() {
-	kill `pgrep -f "backrun.py"`
+	kill -9 `pgrep -f "backrun.py|mlog.py|tail"`
 	return 0
 }
 
 status() {
-	ps -f -C python3 -C tail
+	ps -ef | grep -E "backrun|mlog|tail"
 	return 0
 }
 
