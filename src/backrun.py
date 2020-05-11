@@ -30,7 +30,7 @@ def kill_processor(pname):
     cmd0='kill -9 `pgrep -f "%s"`' % pname
     #print cmd0
     os.system(cmd0)
-    time.sleep(1)
+    time.sleep(3)
 
 
 # 按修改时间顺序返回文件列表
@@ -95,12 +95,14 @@ if __name__=='__main__':
             _ins+=1
             print("%s\tbackrun restart" % time.ctime())
      
-        time.sleep(5)
-        if _count>1000:
+        time.sleep(10)
+        if _count>360:
             if _ins>0:
                 print("%s  HEARTBEAT: error %d" % (time.ctime(), _ins))
             else:
                 print("%s  HEARTBEAT: fine." % (time.ctime()))
             _count=_ins=0
+        else:
+            _count+=1
         sys.stdout.flush()
 

@@ -65,6 +65,7 @@ target/
 result/
 logs/
 data/
+mlog/
 
 *.feature
 *.model
