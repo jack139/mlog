@@ -32,6 +32,11 @@ PCA测试
 
 `python3 predict.py logs/rt/20200417_07.log`
 
+
 ### 多机版：(TODO)
 
-实时日志 --> flume --> Kafka --> MLog
+实时日志1 --> flume_1 --> flume2 --> Kafka --> MLog
+
+flume1: TAILDIR ---> Avro
+flume2: Avro ---> Kafka
+
