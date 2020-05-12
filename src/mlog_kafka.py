@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# 从stdin读入数据, 例如使用管道：
-# tail -f nginx/logs/uwsgi_wx.log | python echo_test.py
+# 从kafka读入数据：
+# 
 #
 
 import sys, os
